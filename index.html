@@ -265,4 +265,173 @@
             <div class="line"><span class="comment">// File: tech_stack.jsx</span></div>
             <div class="line"><span class="comment">// My preferred tools and frameworks.</span></div>
             <div class="line"></div>
-            <div class="line"><span class="keyword
+            <div class="line"><span class="keyword">import</span> { <span class="variable">React</span>, <span class="variable">useState</span> } <span class="keyword">from</span> <span class="string">'react'</span>;</div>
+            <div class="line"></div>
+            <div class="line"><span class="function">const</span> <span class="variable">SkillBadge</span> <span class="keyword">=</span> (<span class="variable">props</span>) <span class="keyword">=></span> {</div>
+            <div class="line">  <span class="keyword">return</span> (</div>
+            <div class="line">    <<span class="element">div</span> <span class="attribute">className</span>=<span class="string">"badge"</span>></div>
+            <div class="line">      { <span class="variable">props</span>.<span class="variable">name</span> } (<span class="variable">props</span>.<span class="variable">level</span>)</div>
+            <div class="line">    </<span class="element">div</span>></div>
+            <div class="line">  );</div>
+            <div class="line">};</div>
+            <div class="line"></div>
+            <div class="line"><span class="function">export</span> <span class="keyword">default</span> <span class="function">function</span> <span class="variable">TechStack</span>() {</div>
+            <div class="line">  <span class="keyword">const</span> [<span class="variable">currentArea</span>, <span class="variable">setArea</span>] <span class="keyword">=</span> <span class="variable">useState</span>(<span class="string">'frontend'</span>);</div>
+            <div class="line"></div>
+            <div class="line">  <span class="keyword">const</span> <span class="variable">techs</span> <span class="keyword">=</span> {</div>
+            <div class="line">    <span class="variable">frontend</span>: [<span class="string">'React'</span>, <span class="string">'TypeScript'</span>, <span class="string">'Tailwind'</span>, <span class="string">'Vue.js'</span>],</div>
+            <div class="line">    <span class="variable">backend</span>: [<span class="string">'Node.js'</span>, <span class="string">'Python (Flask/Django)'</span>, <span class="string">'Go'</span>],</div>
+            <div class="line">    <span class="variable">database</span>: [<span class="string">'PostgreSQL'</span>, <span class="string">'MongoDB'</span>, <span class="string">'Redis'</span>],</div>
+            <div class="line">    <span class="variable">devOps</span>: [<span class="string">'Docker'</span>, <span class="string">'Kubernetes'</span>, <span class="string">'AWS/GCP'</span>]</div>
+            <div class="line">  };</div>
+            <div class="line">  </div>
+            <div class="line">  <span class="keyword">return</span> (</div>
+            <div class="line">    <<span class="element">div</span> <span class="attribute">id</span>=<span class="string">"tech-stack"</span>></div>
+            <div class="line">      <span class="comment">{/* Iterate over skill categories */}</span></div>
+            <div class="line">      {<span class="variable">Object</span>.<span class="function">entries</span>(<span class="variable">techs</span>).<span class="function">map</span>(( [<span class="variable">area</span>, <span class="variable">list</span>] ) <span class="keyword">=></span> (</div>
+            <div class="line">        <<span class="element">div</span> <span class="attribute">key</span>=<span class="string">{area}</span>></div>
+            <div class="line">          <<span class="element">h2</span> <span class="attribute">className</span>=<span class="string">"area-title"</span>><span class="string">{area}</span></<span class="element">h2</span>></div>
+            <div class="line">          {<span class="variable">list</span>.<span class="function">map</span>( <span class="variable">skill</span> <span class="keyword">=></span> (</div>
+            <div class="line">            <<span class="element">SkillBadge</span> <span class="attribute">name</span>=<span class="string">{skill}</span> <span class="attribute">level</span>=<span class="string">"Advanced"</span> /></div>
+            <div class="line">          ))}</div>
+            <div class="line">        </<span class="element">div</span>></div>
+            <div class="line">      ))}</div>
+            <div class="line">    </<span class="element">div</span>></div>
+            <div class="line">  );</div>
+            <div class="line">}</div>
+            <div class="line"></div>
+        </section>
+
+        <section id="section-projects">
+            <div class="line"><span class="comment"># File: projects.md</span></div>
+            <div class="line"><span class="comment">## Recent Work & Highlights</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="variable">Project</span>: <span class="string">E-commerce Microservices Platform</span></div>
+            <div class="line"><span class="variable">Status</span>: <span class="string">Production (2024)</span></div>
+            <div class="line"><span class="variable">Tech</span>: <span class="string">Go, Kafka, PostgreSQL, Docker-Compose</span></div>
+            <div class="line"><span class="comment">A highly scalable, event-driven e-commerce backend handling 1M+ transactions per day.</span></div>
+            <div class="line"><span class="comment">Achieved 99.99% uptime and 10x performance improvement over previous monolithic system.</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="variable">Project</span>: <span class="string">Real-time Data Visualization Dashboard</span></div>
+            <div class="line"><span class="variable">Status</span>: <span class="string">Live Beta (2023)</span></div>
+            <div class="line"><span class="variable">Tech</span>: <span class="string">React, D3.js, WebSockets, Redis</span></div>
+            <div class="line"><span class="comment">Interactive dashboard for financial analysts, updating metrics with < 100ms latency.</span></div>
+            <div class="line"><span class="comment">Custom hooks built for state management of large datasets.</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="variable">Project</span>: <span class="string">AI-Powered Content Generator CLI</span></div>
+            <div class="line"><span class="variable">Status</span>: <span class="string">Internal Tool (2022)</span></div>
+            <div class="line"><span class="variable">Tech</span>: <span class="string">Python, OpenAI API, Typer</span></div>
+            <div class="line"><span class="comment">Reduced content creation time by 40% for the marketing team.</span></div>
+            <div class="line"></div>
+        </section>
+
+        <section id="section-contact">
+            <div class="line"><span class="comment"># File: contact.yaml</span></div>
+            <div class="line"><span class="comment"># How to reach me.</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="keyword">contact_info</span>:</div>
+            <div class="line"><span class="variable">  email</span>: <span class="string">your.email@example.com</span></div>
+            <div class="line"><span class="variable">  linkedin</span>: <span class="string">https://linkedin.com/in/your_profile</span></div>
+            <div class="line"><span class="variable">  github</span>: <span class="string">https://github.com/your_username</span></div>
+            <div class="line"><span class="variable">  phone</span>: <span class="string">"+1 (555) 123-4567"</span> <span class="comment"># Optional</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="keyword">availability</span>:</div>
+            <div class="line"><span class="variable">  status</span>: <span class="string">OPEN_TO_NEW_OPPORTUNITIES</span></div>
+            <div class="line"><span class="variable">  timezone</span>: <span class="string">PST/EST</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="keyword">message_template</span>: <span class="string">|</span></div>
+            <div class="line"><span class="string">  Hey [Your Name],</span></div>
+            <div class="line"><span class="string">  I saw your portfolio and was impressed by [Project Name].</span></div>
+            <div class="line"><span class="string">  I'd love to chat about the [Job Title] role.</span></div>
+            <div class="line"><span class="string">  Looking forward to hearing from you!</span></div>
+            <div class="line"></div>
+        </section>
+                
+        <div class="line"><span class="comment">// EOF</span></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+</div>
+
+<div class="footer-terminal">
+    <div>
+        <span>CURL</span>
+        <span>UTF-8 • CRLF • JavaScript • Full Stack • &copy; 2025</span>
+    </div>
+    <button id="theme-toggle" aria-label="Toggle Theme">
+        ☀️/🌙
+    </button>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // --- Theme Toggle Logic ---
+        $('#theme-toggle').on('click', function() {
+            // Toggle the 'light-mode' class on the <body> element
+            $('body').toggleClass('light-mode');
+
+            // Store the user's preference in localStorage
+            const isLightMode = $('body').hasClass('light-mode');
+            localStorage.setItem('portfolioTheme', isLightMode ? 'light' : 'dark');
+        });
+
+        // --- Load Theme Preference on Page Load ---
+        const savedTheme = localStorage.getItem('portfolioTheme');
+        if (savedTheme === 'light') {
+            $('body').addClass('light-mode');
+        } else {
+            // Default is dark, but explicitly ensure it's not light if preference is unknown/dark
+            $('body').removeClass('light-mode');
+        }
+
+        // --- Smooth Scrolling using jQuery ---
+        $('.nav-item').on('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = $(this).data('target');
+            const targetElement = $(targetId);
+            
+            if (targetElement.length) {
+                // Animate the scroll to the section
+                $('html, body').animate({
+                    scrollTop: targetElement.offset().top - 60 // 60px offset for the sticky navbar
+                }, 800);
+
+                // Update active class
+                $('.nav-item').removeClass('active');
+                $(this).addClass('active');
+            }
+        });
+        
+        // --- Optional: Update active state on scroll (Spy Scroll) ---
+        const sections = $('section');
+        const navItems = $('.nav-item');
+        const navbarHeight = $('.navbar').outerHeight();
+
+        $(window).on('scroll', function() {
+            let scrollPosition = $(this).scrollTop() + navbarHeight + 10; // Add buffer
+
+            sections.each(function() {
+                const currentSection = $(this);
+                const sectionTop = currentSection.offset().top;
+                const sectionBottom = sectionTop + currentSection.outerHeight();
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    const id = '#' + currentSection.attr('id');
+                    navItems.removeClass('active');
+                    $(`[data-target="${id}"]`).addClass('active');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
