@@ -4,28 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - A Developer's Canvas</title>
-    <!-- Load jQuery for the smooth scroll functionality -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /*
          * CORE EDITOR STYLES
-         * Background: #1E1E1E (VS Code Dark)
-         * Base Text: #D4D4D4
+         * We define all colors using CSS Variables for easy theme switching.
          */
         :root { 
-            /* Colors inspired by 'Dark+' VS Code theme */
+            /* --- 1. DARK THEME (Default) --- */
             --editor-bg: #1e1e1e;
-            --line-number: #6A9955; /* Green/Grey for comments/numbers */
+            --line-number-bg: #252526;
+            --navbar-bg: #333333;
             --default-text: #D4D4D4;
-            --keyword: #C586C0; /* Purple/Magenta for functions/keywords */
-            --string: #CE9178; /* Orange/Brown for strings/attributes */
-            --variable: #569cd6; /* Blue for variables/elements */
-            --number: #B5CEA8; /* Light green for numbers/constants */
+            --keyword: #C586C0;
+            --string: #CE9178;
+            --variable: #569cd6;
+            --number: #B5CEA8;
             --comment: #6A9955;
-            --highlight: rgba(144, 202, 249, 0.1); /* Light blue for active line */
+            --highlight: rgba(144, 202, 249, 0.1);
+            --status-bar-bg: #007ACC; /* VS Code Blue */
+            --status-bar-text: white;
+            --nav-item-text: #C6C6C6;
+            --nav-item-hover: #404040;
+
+            /* --- 2. LIGHT THEME (Overwritten when .light-mode is active) --- */
+            /* Default fallback will be the dark mode colors */
         }
 
-        /* 1. Smooth Scroll Setup (CSS approach for modern browsers) */
+        /* 3. LIGHT MODE OVERRIDES */
+        body.light-mode {
+            --editor-bg: #FFFFFF; /* White background */
+            --line-number-bg: #F3F3F3; /* Light gray sidebar */
+            --navbar-bg: #CCCCCC; /* Gray navbar */
+            --default-text: #000000; /* Black text */
+            --keyword: #9538c2; /* Darker Purple */
+            --string: #a31515; /* Red strings */
+            --variable: #0000ff; /* Blue variables */
+            --number: #098658; /* Green numbers */
+            --comment: #008000; /* Dark green comments */
+            --highlight: rgba(0, 0, 0, 0.05); /* Light highlight */
+            --status-bar-bg: #007ACC;
+            --status-bar-text: white;
+            --nav-item-text: #333333;
+            --nav-item-hover: #E0E0E0;
+        }
+
+        /* 4. Base Styles */
         html {
             scroll-behavior: smooth;
         }
@@ -38,9 +62,10 @@
             padding: 0;
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
         }
 
-        /* 2. Editor Container */
+        /* 5. Editor Container */
         .code-editor {
             max-width: 90%;
             margin: 40px auto;
@@ -51,10 +76,10 @@
             display: flex;
         }
 
-        /* 3. Line Numbers */
+        /* 6. Line Numbers */
         .line-numbers {
-            background-color: #252526; /* Slightly lighter side bar */
-            color: var(--line-number);
+            background-color: var(--line-number-bg);
+            color: var(--comment); /* Using comment color for line numbers */
             padding: 20px 10px;
             text-align: right;
             user-select: none;
@@ -64,10 +89,10 @@
 
         .line-numbers div {
             padding: 0 10px;
-            height: 1.6em; /* Match line-height of code block */
+            height: 1.6em;
         }
 
-        /* 4. Code Block */
+        /* 7. Code Block */
         .code-block {
             flex-grow: 1;
             padding: 20px;
@@ -78,17 +103,17 @@
         .line {
             padding: 0 10px;
             white-space: pre;
-            min-height: 1.6em; /* Ensure lines have height */
+            min-height: 1.6em;
         }
 
-        /* Highlight the active/current line (optional) */
+        /* Highlight the active/current line */
         .line-numbers div:nth-child(10), .line:nth-child(10),
         .line-numbers div:nth-child(55), .line:nth-child(55),
         .line-numbers div:nth-child(80), .line:nth-child(80) {
             background-color: var(--highlight);
         }
 
-        /* 5. Syntax Highlighting Classes */
+        /* 8. Syntax Highlighting Classes */
         .comment { color: var(--comment); font-style: italic; }
         .keyword { color: var(--keyword); }
         .string { color: var(--string); }
@@ -98,9 +123,9 @@
         .number { color: var(--number); }
         .attribute { color: var(--string); }
         
-        /* 6. Navigation (Mimics tab/file structure) */
+        /* 9. Navigation (Mimics tab/file structure) */
         .navbar {
-            background-color: #333333;
+            background-color: var(--navbar-bg);
             padding: 10px 0;
             position: sticky;
             top: 0;
@@ -109,7 +134,7 @@
         }
         
         .nav-inner {
-            max-width: 27%;
+            max-width: 90%; /* Increased width for better flow */
             margin: 0 auto;
             display: flex;
             gap: 20px;
@@ -118,7 +143,7 @@
         
         .nav-item {
             cursor: pointer;
-            color: #C6C6C6;
+            color: var(--nav-item-text);
             padding: 8px 15px;
             border-radius: 4px 4px 0 0;
             transition: all 0.3s ease;
@@ -134,13 +159,13 @@
         }
 
         .nav-item:hover:not(.active) {
-            background-color: #404040;
+            background-color: var(--nav-item-hover);
         }
 
-        /* 7. Footer / Terminal Prompt */
+        /* 10. Footer / Terminal Prompt and Toggle Button */
         .footer-terminal {
-            background-color: #007ACC; /* Blue accent for status bar */
-            color: white;
+            background-color: var(--status-bar-bg);
+            color: var(--status-bar-text);
             padding: 8px 20px;
             font-size: 0.75em;
             display: flex;
@@ -148,34 +173,33 @@
             align-items: center;
         }
 
-        /* 8. Responsive adjustments */
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: var(--status-bar-text);
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-left: 15px;
+            transition: transform 0.2s;
+        }
+
+        #theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* 11. Responsive adjustments */
         @media (max-width: 768px) {
-            .code-editor {
-                margin: 0;
-                border-radius: 0;
-                min-height: 100vh;
-            }
-            .line-numbers {
-                padding: 10px 5px;
-                font-size: 0.8em;
-            }
-            .code-block {
-                padding: 10px;
-                font-size: 0.8em;
-            }
-            .nav-item {
-                padding: 6px 10px;
-            }
-            .nav-inner {
-                overflow-x: auto;
-                white-space: nowrap;
-            }
+            /* ... (existing responsive styles) ... */
+            .code-editor { margin: 0; border-radius: 0; min-height: 100vh; }
+            .line-numbers { padding: 10px 5px; font-size: 0.8em; }
+            .code-block { padding: 10px; font-size: 0.8em; }
+            .nav-item { padding: 6px 10px; }
+            .nav-inner { overflow-x: auto; white-space: nowrap; }
         }
     </style>
 </head>
 <body>
 
-<!-- Navigation Bar (File Tabs) -->
 <div class="navbar">
     <div class="nav-inner">
         <a class="nav-item active" data-target="#section-about">main.js</a>
@@ -185,12 +209,9 @@
     </div>
 </div>
 
-<!-- Code Editor Wrapper -->
 <div class="code-editor">
     
-    <!-- Line Numbers Side Panel -->
     <div class="line-numbers">
-        <!-- Generate 100 line numbers dynamically just for effect -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const lineNumbers = document.querySelector('.line-numbers');
@@ -203,10 +224,8 @@
         </script>
     </div>
 
-    <!-- Code Content Area -->
     <div class="code-block">
         
-        <!-- ============================= 1. ABOUT ME (main.js) ============================= -->
         <section id="section-about">
             <div class="line"><span class="comment">// File: main.js</span></div>
             <div class="line"><span class="comment">// A brief introduction. The entry point to my professional life.</span></div>
@@ -218,183 +237,32 @@
             <div class="line">};</div>
             <div class="line"></div>
             <div class="line"><span class="function">function</span> <span class="variable">initPortfolio</span>(<span class="variable">user</span>) {</div>
-            <div class="line">  <span class="keyword">if</span> (<span class="variable">user</span>.<span class="variable">status</span> <span class="keyword">===</span> <span class="string">'hiring_manager'</span>) {</div>
-            <div class="line">    <span class="keyword">return</span> <span class="string">'Hire me!'</span>;</div>
-            <div class="line">  } <span class="keyword">else</span> {</div>
-            <div class="line">    <span class="keyword">return</span> <span class="string">'Welcome! Scroll down to explore my work.'</span>;</div>
-            <div class="line">  }</div>
+            <div class="line">  <span class="keyword">if</span> (<span class="variable">user</span>.<span class="variable">status</span> <span class="keyword">===</span> <span class="string">'hiring_manager'</span>) {</div>
+            <div class="line">    <span class="keyword">return</span> <span class="string">'Hire me!'</span>;</div>
+            <div class="line">  } <span class="keyword">else</span> {</div>
+            <div class="line">    <span class="keyword">return</span> <span class="string">'Welcome! Scroll down to explore my work.'</span>;</div>
+            <div class="line">  }</div>
             <div class="line">}</div>
             <div class="line"></div>
             <div class="line"><span class="comment">// Core Expertise: Building robust, scalable applications.</span></div>
             <div class="line"><span class="keyword">class</span> <span class="variable">Developer</span> {</div>
-            <div class="line">  <span class="function">constructor</span>() {</div>
-            <div class="line">    <span class="keyword">this</span>.<span class="variable">experience</span> <span class="keyword">=</span> <span class="number">6</span>;</div>
-            <div class="line">    <span class="keyword">this</span>.<span class="variable">frontend</span> <span class="keyword">=</span> <span class="number">true</span>;</div>
-            <div class="line">    <span class="keyword">this</span>.<span class="variable">backend</span> <span class="keyword">=</span> <span class="number">true</span>;</div>
-            <div class="line">  }</div>
-            <div class="line">  </div>
-            <div class="line">  <span class="function">solveProblem</span>(<span class="variable">complexity</span>) {</div>
-            <div class="line">    <span class="keyword">return</span> <span class="string">`Applying ${complexity} logic and clean code.`</span>;</div>
-            <div class="line">  }</div>
+            <div class="line">  <span class="function">constructor</span>() {</div>
+            <div class="line">    <span class="keyword">this</span>.<span class="variable">experience</span> <span class="keyword">=</span> <span class="number">6</span>;</div>
+            <div class="line">    <span class="keyword">this</span>.<span class="variable">frontend</span> <span class="keyword">=</span> <span class="number">true</span>;</div>
+            <div class="line">    <span class="keyword">this</span>.<span class="variable">backend</span> <span class="keyword">=</span> <span class="number">true</span>;</div>
+            <div class="line">  }</div>
+            <div class="line">  </div>
+            <div class="line">  <span class="function">solveProblem</span>(<span class="variable">complexity</span>) {</div>
+            <div class="line">    <span class="keyword">return</span> <span class="string">`Applying ${complexity} logic and clean code.`</span>;</div>
+            <div class="line">  }</div>
             <div class="line">}</div>
             <div class="line"></div>
             <div class="line"><span class="variable">console</span>.<span class="function">log</span>(<span class="variable">initPortfolio</span>({<span class="variable">status</span>: <span class="string">'visitor'</span>}));</div>
             <div class="line"></div>
         </section>
 
-        <!-- ============================= 2. SKILLS (tech_stack.jsx) ============================= -->
         <section id="section-skills">
             <div class="line"><span class="comment">// File: tech_stack.jsx</span></div>
             <div class="line"><span class="comment">// My preferred tools and frameworks.</span></div>
             <div class="line"></div>
-            <div class="line"><span class="keyword">import</span> { <span class="variable">React</span>, <span class="variable">useState</span> } <span class="keyword">from</span> <span class="string">'react'</span>;</div>
-            <div class="line"></div>
-            <div class="line"><span class="function">const</span> <span class="variable">SkillBadge</span> <span class="keyword">=</span> (<span class="variable">props</span>) <span class="keyword">=></span> {</div>
-            <div class="line">  <span class="keyword">return</span> (</div>
-            <div class="line">    <<span class="element">div</span> <span class="attribute">className</span>=<span class="string">"badge"</span>></div>
-            <div class="line">      { <span class="variable">props</span>.<span class="variable">name</span> } (<span class="variable">props</span>.<span class="variable">level</span>)</div>
-            <div class="line">    </<span class="element">div</span>></div>
-            <div class="line">  );</div>
-            <div class="line">};</div>
-            <div class="line"></div>
-            <div class="line"><span class="function">export</span> <span class="keyword">default</span> <span class="function">function</span> <span class="variable">TechStack</span>() {</div>
-            <div class="line">  <span class="keyword">const</span> [<span class="variable">currentArea</span>, <span class="variable">setArea</span>] <span class="keyword">=</span> <span class="variable">useState</span>(<span class="string">'frontend'</span>);</div>
-            <div class="line"></div>
-            <div class="line">  <span class="keyword">const</span> <span class="variable">techs</span> <span class="keyword">=</span> {</div>
-            <div class="line">    <span class="variable">frontend</span>: [<span class="string">'React'</span>, <span class="string">'TypeScript'</span>, <span class="string">'Tailwind'</span>, <span class="string">'Vue.js'</span>],</div>
-            <div class="line">    <span class="variable">backend</span>: [<span class="string">'Node.js'</span>, <span class="string">'Python (Flask/Django)'</span>, <span class="string">'Go'</span>],</div>
-            <div class="line">    <span class="variable">database</span>: [<span class="string">'PostgreSQL'</span>, <span class="string">'MongoDB'</span>, <span class="string">'Redis'</span>],</div>
-            <div class="line">    <span class="variable">devOps</span>: [<span class="string">'Docker'</span>, <span class="string">'Kubernetes'</span>, <span class="string">'AWS/GCP'</span>]</div>
-            <div class="line">  };</div>
-            <div class="line">  </div>
-            <div class="line">  <span class="keyword">return</span> (</div>
-            <div class="line">    <<span class="element">div</span> <span class="attribute">id</span>=<span class="string">"tech-stack"</span>></div>
-            <div class="line">      <span class="comment">{/* Iterate over skill categories */}</span></div>
-            <div class="line">      {<span class="variable">Object</span>.<span class="function">entries</span>(<span class="variable">techs</span>).<span class="function">map</span>(( [<span class="variable">area</span>, <span class="variable">list</span>] ) <span class="keyword">=></span> (</div>
-            <div class="line">        <<span class="element">div</span> <span class="attribute">key</span>=<span class="string">{area}</span>></div>
-            <div class="line">          <<span class="element">h2</span> <span class="attribute">className</span>=<span class="string">"area-title"</span>><span class="string">{area}</span></<span class="element">h2</span>></div>
-            <div class="line">          {<span class="variable">list</span>.<span class="function">map</span>( <span class="variable">skill</span> <span class="keyword">=></span> (</div>
-            <div class="line">            <<span class="element">SkillBadge</span> <span class="attribute">name</span>=<span class="string">{skill}</span> <span class="attribute">level</span>=<span class="string">"Advanced"</span> /></div>
-            <div class="line">          ))}</div>
-            <div class="line">        </<span class="element">div</span>></div>
-            <div class="line">      ))}</div>
-            <div class="line">    </<span class="element">div</span>></div>
-            <div class="line">  );</div>
-            <div class="line">}</div>
-            <div class="line"></div>
-        </section>
-
-        <!-- ============================= 3. PROJECTS (projects.md) ============================= -->
-        <section id="section-projects">
-            <div class="line"><span class="comment"># File: projects.md</span></div>
-            <div class="line"><span class="comment">## Recent Work & Highlights</span></div>
-            <div class="line"></div>
-            <div class="line"><span class="variable">Project</span>: <span class="string">E-commerce Microservices Platform</span></div>
-            <div class="line"><span class="variable">Status</span>: <span class="string">Production (2024)</span></div>
-            <div class="line"><span class="variable">Tech</span>: <span class="string">Go, Kafka, PostgreSQL, Docker-Compose</span></div>
-            <div class="line"><span class="comment">A highly scalable, event-driven e-commerce backend handling 1M+ transactions per day.</span></div>
-            <div class="line"><span class="comment">Achieved 99.99% uptime and 10x performance improvement over previous monolithic system.</span></div>
-            <div class="line"></div>
-            <div class="line"><span class="variable">Project</span>: <span class="string">Real-time Data Visualization Dashboard</span></div>
-            <div class="line"><span class="variable">Status</span>: <span class="string">Live Beta (2023)</span></div>
-            <div class="line"><span class="variable">Tech</span>: <span class="string">React, D3.js, WebSockets, Redis</span></div>
-            <div class="line"><span class="comment">Interactive dashboard for financial analysts, updating metrics with < 100ms latency.</span></div>
-            <div class="line"><span class="comment">Custom hooks built for state management of large datasets.</span></div>
-            <div class="line"></div>
-            <div class="line"><span class="variable">Project</span>: <span class="string">AI-Powered Content Generator CLI</span></div>
-            <div class="line"><span class="variable">Status</span>: <span class="string">Internal Tool (2022)</span></div>
-            <div class="line"><span class="variable">Tech</span>: <span class="string">Python, OpenAI API, Typer</span></div>
-            <div class="line"><span class="comment">Reduced content creation time by 40% for the marketing team.</span></div>
-            <div class="line"></div>
-        </section>
-
-        <!-- ============================= 4. CONTACT (contact.yaml) ============================= -->
-        <section id="section-contact">
-            <div class="line"><span class="comment"># File: contact.yaml</span></div>
-            <div class="line"><span class="comment"># How to reach me.</span></div>
-            <div class="line"></div>
-            <div class="line"><span class="keyword">contact_info</span>:</div>
-            <div class="line"><span class="variable">  email</span>: <span class="string">your.email@example.com</span></div>
-            <div class="line"><span class="variable">  linkedin</span>: <span class="string">https://linkedin.com/in/your_profile</span></div>
-            <div class="line"><span class="variable">  github</span>: <span class="string">https://github.com/your_username</span></div>
-            <div class="line"><span class="variable">  phone</span>: <span class="string">"+1 (555) 123-4567"</span> <span class="comment"># Optional</span></div>
-            <div class="line"></div>
-            <div class="line"><span class="keyword">availability</span>:</div>
-            <div class="line"><span class="variable">  status</span>: <span class="string">OPEN_TO_NEW_OPPORTUNITIES</span></div>
-            <div class="line"><span class="variable">  timezone</span>: <span class="string">PST/EST</span></div>
-            <div class="line"></div>
-            <div class="line"><span class="keyword">message_template</span>: <span class="string">|</span></div>
-            <div class="line"><span class="string">  Hey [Your Name],</span></div>
-            <div class="line"><span class="string">  I saw your portfolio and was impressed by [Project Name].</span></div>
-            <div class="line"><span class="string">  I'd love to chat about the [Job Title] role.</span></div>
-            <div class="line"><span class="string">  Looking forward to hearing from you!</span></div>
-            <div class="line"></div>
-        </section>
-        
-        <!-- Filler Lines to ensure good scrolling -->
-        <div class="line"><span class="comment">// EOF</span></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-    </div>
-</div>
-
-<!-- Status Bar (Mimics VS Code Status Bar) -->
-<div class="footer-terminal">
-    <span>CURL</span>
-    <span>UTF-8 • CRLF • JavaScript • Full Stack • &copy; 2025</span>
-</div>
-
-<!-- JavaScript for Smooth Scrolling and Active Nav State -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- Smooth Scrolling using jQuery (as requested by user) ---
-        $('.nav-item').on('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = $(this).data('target');
-            const targetElement = $(targetId);
-            
-            if (targetElement.length) {
-                // Animate the scroll to the section
-                $('html, body').animate({
-                    scrollTop: targetElement.offset().top - 60 // 60px offset for the sticky navbar
-                }, 800); // 800ms duration for a very smooth feel
-
-                // Update active class
-                $('.nav-item').removeClass('active');
-                $(this).addClass('active');
-            }
-        });
-        
-        // --- Optional: Update active state on scroll (Spy Scroll) ---
-        const sections = $('section');
-        const navItems = $('.nav-item');
-        const navbarHeight = $('.navbar').outerHeight();
-
-        $(window).on('scroll', function() {
-            let scrollPosition = $(this).scrollTop() + navbarHeight + 10; // Add buffer
-
-            sections.each(function() {
-                const currentSection = $(this);
-                const sectionTop = currentSection.offset().top;
-                const sectionBottom = sectionTop + currentSection.outerHeight();
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    const id = '#' + currentSection.attr('id');
-                    navItems.removeClass('active');
-                    $(`[data-target="${id}"]`).addClass('active');
-                }
-            });
-        });
-    });
-</script>
-
-</body>
-</html>
+            <div class="line"><span class="keyword
