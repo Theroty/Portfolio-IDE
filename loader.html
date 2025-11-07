@@ -3,157 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Milk Drop Loader</title>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
+    <title>Milk Fall Loader</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* ------------------------------------------
-        CSS STYLES
-        ------------------------------------------ 
-        */
-        body {
-            /* Full viewport, white background for the 'milk' effect */
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Hide scrollbars during the animation */
-            background-color: #f0f0f0; /* Light background before the drop */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Start the milk at the top */
-            height: 100vh;
-        }
-
-        /* The 'Milk' Element */
-        #milk-drop {
-            /* Initial state: a small, white circle at the top center */
-            position: absolute;
-            top: 0;
-            width: 50px;
-            height: 50px;
-            background-color: white; /* Milk color */
-            border-radius: 50%; /* Makes it a circle */
-            z-index: 1000; /* Ensure it's on top of everything */
-            
-            /* Add a subtle box-shadow for depth */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
-            
-            /* Start it slightly off-screen for a better drop effect */
-            transform: translateY(-100px); 
-            opacity: 0; /* Hidden initially, jQuery will fade it in */
-        }
-        
-        /* The Blank Cover Layer */
-        #blank-cover {
-            /* Full screen, completely transparent initially */
+        /*
+         * 1. Full Screen Container for the Loader
+         */
+        #loader-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: white; /* The color it will cover with */
-            z-index: 999; /* Below the milk drop initially */
-            opacity: 0; /* Fully transparent */
-            pointer-events: none; /* Allows clicks/interaction to pass through initially */
+            width: 100%;
+            height: 100%;
+            background-color: #f8f8f8; /* Light background for contrast */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top */
+            transition: opacity 0.5s ease-out;
+            pointer-events: all;
         }
 
-        /* ------------------------------------------
-        CSS for the rest of your page content
-        ------------------------------------------ 
-        */
-        #page-content {
-            padding: 20px;
-            text-align: center;
-            opacity: 1; /* Starts visible */
-            transition: opacity 1s ease-out; /* Smooth fade-out later */
+        /*
+         * 2. The "Milk" Droplets/Layers
+         */
+        .milk-drop {
+            position: absolute;
+            width: 150px; /* Size of the milk effect */
+            height: 150px;
+            background-color: white;
+            border-radius: 50%; /* Start as a circle/drop */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            opacity: 0.9;
+            animation: fall-and-spread 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; /* Smooth motion */
         }
-    </style>
-</head>
-<body>
 
-    <div id="blank-cover"></div>
+        /* Stagger the animation of multiple drops */
+        .milk-drop:nth-child(1) {
+            left: 45%;
+            animation-delay: 0s;
+        }
 
-    <div id="milk-drop"></div>
+        .milk-drop:nth-child(2) {
+            left: 55%;
+            width: 120px;
+            height: 120px;
+            animation-delay: 0.3s;
+        }
 
-    <div id="page-content">
-        <h1>🥛 Welcome to the Page! 🥛</h1>
-        <p>This content will appear after the milk drop animation is complete.</p>
-        <p>The milk drop animation is running right now!</p>
-    </div>
+        .milk-drop:nth-child(3) {
+            left: 38%;
+            width: 180px;
+            height: 180px;
+            animation-delay: 0.1s;
+        }
 
-    <script>
-        /* ------------------------------------------
-        JQUERY/JAVASCRIPT LOGIC
-        ------------------------------------------ 
-        */
-        $(document).ready(function() {
-            const $milkDrop = $('#milk-drop');
-            const $blankCover = $('#blank-cover');
-            const $pageContent = $('#page-content');
-            const dropDuration = 1000; // Time in milliseconds for the drop (1 second)
-            const coverDuration = 800;  // Time for the screen to fill (0.8 seconds)
-            
-            // 1. Initial Fade-In
-            // Make the milk drop appear slightly above the top
-            $milkDrop.animate({
-                opacity: 1, // Fade in
-                transform: 'translateY(0px)' // Move slightly down to start the drop
-            }, 300, function() {
-                
-                // 2. The Smooth Drop Animation
-                $milkDrop.animate({
-                    // Use CSS properties like top and height for the smooth fall
-                    // The '100vh - 25px' makes it fall near the bottom center
-                    top: '100vh', 
-                    height: '50px' // Keep height the same for a better drop
-                }, {
-                    duration: dropDuration,
-                    easing: 'swing', // Standard smooth easing
-                    complete: function() {
-                        
-                        // 3. The Cover-Up Animation
-                        // Once the milk hits the bottom, it "splatters" and covers the screen.
-                        
-                        // First, resize the drop element to cover the screen
-                        $milkDrop.css({
-                            'z-index': 1001, // Keep it on top
-                            'transition': 'all ' + (coverDuration / 1000) + 's ease-in-out' // Use CSS transition for a smoother fill effect
-                        }).animate({
-                            width: '200vw',  // Make it large enough to instantly fill the screen
-                            height: '200vh', 
-                            top: '-50vh', // Adjust position to center the massive circle
-                            left: '-50vw',
-                            'border-radius': '0%' // Optional: make it look like a solid square cover
-                        }, coverDuration, function() {
-                            
-                            // 4. Cleanup and Show Final Content (or not, if you want it blank)
-                            
-                            // To reveal the page content:
-                            // The milk drop now fully covers the page.
-                            // If you want to fade out the blank-cover to reveal content:
-                            $milkDrop.fadeOut(500, function() {
-                                // Fade the page content back in
-                                $pageContent.css('opacity', '1'); 
-                                $('body').css('overflow', 'auto'); // Allow scrolling
-                                
-                                // Clean up the milk element
-                                $(this).remove(); 
-                            });
-
-                            /* // If you want the page to stay covered in blank/white:
-                            $pageContent.fadeOut(500); 
-                            $('body').css('background-color', 'white'); // Ensure the whole body is white
-                            $milkDrop.css('opacity', '1'); // Keep the cover fully opaque
-                            */
-
-                        });
-
-                        // Simultaneously, fade out the page content beneath the animation
-                        $pageContent.animate({ opacity: 0 }, 500);
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+        /*
+         * 3. Keyframe Animation: Fall Down and Spread
+         */
+        @keyframes fall-and-spread {
+            0% {
+                transform: translateY(-100vh) scale(0.5); /* Start above the screen */
+                opacity:
